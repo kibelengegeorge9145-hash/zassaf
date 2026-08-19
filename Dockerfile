@@ -33,4 +33,9 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-RUN php artisan migrate --force
+# Copy entrypoint script na weka executable permissions
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Tumia entrypoint.sh badala ya CMD ya kawaida
+ENTRYPOINT ["entrypoint.sh"]
